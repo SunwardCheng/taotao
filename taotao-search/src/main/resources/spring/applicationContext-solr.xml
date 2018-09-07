@@ -1,0 +1,27 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+		
+	<!-- 单机版配置 -->
+<!--  	<bean id="httpSolrClientBuilder" class="org.apache.solr.client.solrj.impl.HttpSolrClient.Builder">
+ 		<constructor-arg value="${SOLR_SERVER_URL}" type="java.lang.String"></constructor-arg>
+	</bean> 
+	<bean id="solrClientBulider" factory-bean="httpSolrClientBuilder" 
+		factory-method="build" /> -->
+	
+	<!-- 集群版配置 -->
+	<bean id="cloudSolrClientBuilder" class="org.apache.solr.client.solrj.impl.CloudSolrClient.Builder"/>	
+	<bean id="builder" factory-bean="cloudSolrClientBuilder" factory-method="withZkHost">
+		<constructor-arg value="${SOLR_CLOUD_URL}" type="java.lang.String"></constructor-arg>
+	</bean>
+	<bean id="cloudSolrClient" factory-bean="builder" factory-method="build" >
+		<property name="defaultCollection" value="${DEFAULT_COLLECTION}" />
+	</bean>
+	
+</beans>
+	
